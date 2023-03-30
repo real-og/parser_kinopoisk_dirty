@@ -1,0 +1,15 @@
+authority: browser-updater.yandex.net
+method: GET
+path: /?browserUpdate=%7B%22fx%22%3A84%2C%22opera%22%3A72%2C%22safari%22%3A12%2C%22yabrowser%22%3A19%2C%22ie%22%3A88%2C%22iron%22%3A85%2C%22chrome%22%3A85%2C%22camino%22%3A%22Infinity%22%2C%22flock%22%3A%22Infinity%22%7D&jsonp=yaBrowserUpdaterJSONPCallback
+scheme: https
+accept: */*
+accept-encoding: gzip, deflate, br
+accept-language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,zu;q=0.6,ja;q=0.5
+referer: https://www.kinopoisk.ru/
+sec-ch-ua: "Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+sec-fetch-dest: script
+sec-fetch-mode: no-cors
+sec-fetch-site: cross-site
+user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36

@@ -1,0 +1,22 @@
+authority: graphql.kinopoisk.ru
+method: POST
+path: /graphql/?operationName=MovieDesktopListPage
+scheme: https
+accept: */*
+accept-encoding: gzip, deflate, br
+accept-language: ru,en;q=0.9
+content-length: 5599
+content-type: application/json
+cookie: gdpr=0; _ym_uid=1672514929545479477; PHPSESSID=e13454d9b13af4f0b91bbd28ee6e004e; yandex_gid=157; yandexuid=4115095081672211108; yuidss=4115095081672211108; yandex_login=grakovich-e; L=e1BJRF4EWX5wUmFaRXBdRV9yU3BTUURyKigRGDgwICwkHV0=.1672514937.15208.357783.68596a47835ddbcc274fcaf905894497; uid=23952099; location=1; my_perpages=%5B%5D; mda_exp_enabled=1; coockoos=4; i=oW3dqb0R3lRECzc5CUFqEMc/3rNA7oXHI974SMS0OrRRGJjWkRMaFQT0FhoLWWDe1pa6EgW7aPh1I26jXuKx+hF+6sM=; mustsee_sort_v5=01.10.200.21.31.41.121.131.51.61.71.81.91.101.111; mykp_button=history; _yasc=ndhYeqxaEshCWHgP1OVxV/BktZV+1WWge7x61uqdorbrYnAtTOY04vIgYIs=; disable_server_sso_redirect=1; ya_sess_id=3:1679959715.5.0.1672514937375:eEPWJQ:36.1.2:1|240839863.0.2.0:3|30:10214825.983770.Wy8m7X-61rnEGPhf8ralbJ-lPGs; ys=c_chck.1462369929#udn.cDpncmFrb3ZpY2gtZQ%3D%3D; mda2_beacon=1679959715356; sso_status=sso.passport.yandex.ru:synchronized; _ym_isad=1; crookie=9KSKBeYscrbMc2qvmnxpD1OexjRb3QrN6GqBT8gd4D4XU+DKy2BOXQVFVzjoBOg8cbFGWZvZ70sPXpDJW91qnOwsCLk=; cmtchd=MTY3OTk1OTcxNzQ5NA==; yp=1680046117.yu.4115095081672211108; ymex=1682551717.oyu.4115095081672211108; kpunk=1; _ym_d=1679959746
+origin: https://www.kinopoisk.ru
+referer: https://www.kinopoisk.ru/
+sec-ch-ua: "Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+sec-fetch-dest: empty
+sec-fetch-mode: cors
+sec-fetch-site: same-site
+service-id: 25
+uber-trace-id: 188756b72b579db1:1dc29e49a88ef1a6:0:1
+user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36
+x-request-id: 1679959722036956-7073507951038637955
