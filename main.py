@@ -63,7 +63,19 @@ def get_about(id):
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
+    options.add_argument("--disable-blink-features=AutomationControlled")
+
     driver = webdriver.Chrome(executable_path=driver_path, options=options)
+
+    driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+        'source': '''
+            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;
+            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Promise;
+            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;
+
+        '''
+    })
+
     url = f'https://www.kinopoisk.ru/film/{id}/'
     driver.get(url)
     html = driver.page_source
