@@ -22,6 +22,6 @@ class Database(object):
 
 def add_film(uuid, title, code, has_oscar, photo, year, country, director, actors, rating, genre, about):
     with Database() as curs:
-        _SQL = f"""insert into robot_movie values
+        _SQL = f"""insert into robot_serial values
         ($${uuid}$$, $${title}$$, {code}, {has_oscar}, $${photo}$$, {year}, $${country}$$, $${director}$$, $${actors}$$, {rating}, $${genre}$$, $${about}$$);"""
         curs.execute(_SQL)
