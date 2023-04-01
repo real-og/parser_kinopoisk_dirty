@@ -1,5 +1,4 @@
-import db
-import uuid 
-import main
+import random
 
-print(main.get_oscar(8124))
+random_number = random.randint(5, 10)
+print(random_number)

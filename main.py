@@ -5,6 +5,10 @@ import uuid
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import db
+import time
+import random
+
+random_number = random.randint(5, 10)
 
 # driver_path = '/home/evgeny/freelance/parser_tiktok/chromedriver_linux64/chromedriver'
 # options = webdriver.ChromeOptions()
@@ -38,8 +42,17 @@ def get_oscar(id):
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
     }
     full_info = requests.get(f"https://www.kinopoisk.ru/film/{id}/awards/", headers=headers)
-    if not('Награды' in full_info.text):
-        print('что-то не так оскар')
+    while not('Награды' in full_info.text):
+        headers = {
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+        }
+        full_info = requests.get(f"https://www.kinopoisk.ru/film/{id}/awards/", headers=headers)
+        print(str(id) + 'что-то не так оскар')
+        time.sleep(random.randint(5, 10))
+
+    with open("log-oscar.txt", 'a') as f:
+        f.write(full_info.text)
+        f.write("\n\n*************************\n\n")
 
     return 'Оскар, ' in full_info.text
 
@@ -54,10 +67,21 @@ def get_about(id):
     url = f'https://www.kinopoisk.ru/film/{id}/'
     driver.get(url)
     html = driver.page_source
-    driver.quit()
     soup = BeautifulSoup(html, 'html.parser')
-    if not('Награды' in soup.text):
-        print('что-то не так о фильме')
+
+    soup.prettify()
+    with open("log-about.txt", 'a') as f:
+        f.write(soup.text)
+        f.write("\n\n*************************\n\n")
+
+    while not('Награды' in soup.text):
+        driver.get(url)
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
+        print(str(id) + '@о фильме@')
+        time.sleep(random.randint(5, 10))
+
+    driver.quit()
     if soup.find('p', {'class': 'styles_paragraph__wEGPz'}):
         return soup.find('p', {'class': 'styles_paragraph__wEGPz'}).text
     return "нет описания"
@@ -69,7 +93,8 @@ if __name__ == '__main__':
     index = 10
     for genre in genres:
         for offset in range(6):
-            for mov in get_movies('"horror"', '50', str(offset * 50)):
+            for mov in get_movies(genre, '50', str(offset * 50)):
+                time.sleep(random.randint(2, 5))
                 movie = mov['movie']
                 id = movie['id']
                 mov_id = uuid.uuid4()
@@ -101,11 +126,22 @@ if __name__ == '__main__':
                     director = 'Нет информации'
                 rating = round(float(movie['rating']['kinopoisk']['value']), 2)
                 year = int(movie['productionYear'])
-                oscar = get_oscar(id)
 
+
+                oscar = get_oscar(id)
                 about = get_about(id)
+
+                if genre == '"biography"':
+                    genre_to_pass = "romance"
+                elif genre == '"fantasy"':
+                    genre_to_pass = "sci-fi"
+                else:
+                    genre_to_pass = genre[1:-1]
+                
+
                 # about = 'о фильме'
-                db.add_film(mov_id, title, index, oscar, photo, year, country, director, actors, rating, "comedy", about)
+
+                db.add_film(mov_id, title, index, oscar, photo, year, country, director, actors, rating, genre_to_pass, about)
                 index += 1
 
                 print(str(id) + '----------------------')
