@@ -1,4 +1,3 @@
 import random
-
-random_number = random.randint(5, 10)
-print(random_number)
+from main import get_about
+print(get_about(904907))

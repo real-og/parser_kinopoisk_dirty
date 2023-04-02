@@ -7,15 +7,9 @@ from selenium import webdriver
 import db
 import time
 import random
+import os
 
 random_number = random.randint(5, 10)
-
-# driver_path = '/home/evgeny/freelance/parser_tiktok/chromedriver_linux64/chromedriver'
-# options = webdriver.ChromeOptions()
-# options.add_argument('--headless')
-# options.add_argument('--no-sandbox')
-# options.add_argument('--disable-dev-shm-usage')
-# driver = webdriver.Chrome(executable_path=driver_path, options=options)
 
 def get_movies(genre, num, offset):
 
@@ -37,75 +31,21 @@ def get_movies(genre, num, offset):
     movies = json.loads(resp.text)['data']['movieListBySlug']['movies']['items']
     return movies
 
-
-def get_oscar(id):
-    headers = {
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
-    }
-    full_info = requests.get(f"https://www.kinopoisk.ru/film/{id}/awards/", headers=headers)
-    while not('Награды' in full_info.text):
-        headers = {
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
-        }
-        full_info = requests.get(f"https://www.kinopoisk.ru/film/{id}/awards/", headers=headers)
-        print(str(id) + 'что-то не так оскар')
-        time.sleep(random.randint(5, 10))
-
-    with open("log-oscar.txt", 'a') as f:
-        f.write(full_info.text)
-        f.write("\n\n*************************\n\n")
-
-    return 'Оскар, ' in full_info.text
-
-
+TOKEN_e = str(os.environ.get('TOKEN'))
 def get_about(id):
-    driver_path = '/home/evgeny/freelance/parser_tiktok/chromedriver_linux64/chromedriver'
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument("--disable-blink-features=AutomationControlled")
-
-    driver = webdriver.Chrome(executable_path=driver_path, options=options)
-
-    driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-        'source': '''
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Promise;
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;
-
-        '''
-    })
-
-    url = f'https://www.kinopoisk.ru/film/{id}/'
-    driver.get(url)
-    html = driver.page_source
-    soup = BeautifulSoup(html, 'html.parser')
-
-    soup.prettify()
-    with open("log-about.txt", 'a') as f:
-        f.write(soup.text)
-        f.write("\n\n*************************\n\n")
-
-    while not('Награды' in soup.text):
-        driver.get(url)
-        html = driver.page_source
-        soup = BeautifulSoup(html, 'html.parser')
-        print(str(id) + '@о фильме@')
-        time.sleep(random.randint(5, 10))
-
-    driver.quit()
-    if soup.find('p', {'class': 'styles_paragraph__wEGPz'}):
-        return soup.find('p', {'class': 'styles_paragraph__wEGPz'}).text
-    return "нет описания"
+    url = f"https://api.kinopoisk.dev/v1/movie/{id}"
+    header = {"X-API-KEY" : TOKEN_e}
+    resp = requests.get(url, headers=header)
+    json_r = json.loads(resp.text)
+    return json_r['description']
 
 
 
 if __name__ == '__main__':
     genres = ['"comedy"', '"horror"', '"thriller"', '"drama"', '"action"', '"fantasy"', '"biography"']
-    index = 2110
+    index = 10
     for genre in genres:
-        for offset in range(6):
+        for offset in range(3):
             for mov in get_movies(genre, '50', str(offset * 50)):
                 movie = mov['movie']
                 id = movie['id']
@@ -145,7 +85,7 @@ if __name__ == '__main__':
 
                 # oscar = get_oscar(id)
                 oscar = False
-                # about = get_about(id)
+                about = get_about(id)
 
                 if genre == '"biography"':
                     genre_to_pass = "romance"
@@ -155,7 +95,7 @@ if __name__ == '__main__':
                     genre_to_pass = genre[1:-1]
                 
 
-                about = 'о сериале'
+                # about = 'о сериале'
 
                 db.add_film(mov_id, title, index, oscar, photo, year, country, director, actors, rating, genre_to_pass, about)
                 index += 1
